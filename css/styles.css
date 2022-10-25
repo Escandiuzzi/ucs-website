@@ -88,7 +88,6 @@
 .modal-card {
     background-color: #ffffff;
     width: 80vw;
-    height: 70vh;
     text-align: center;
     padding: 4%;
     overflow-y: auto;
@@ -119,7 +118,7 @@
 
 .prerequisite-code {
     color: #ffffff;
-    margin: 4vh 0;
+    margin: 1vh 0;
 }
 
 .prerequisite-class {
