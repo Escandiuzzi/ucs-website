@@ -38,7 +38,6 @@ function loadHeader(data) {
 function createTable(data) {
     var classes = [];
     classes = data.DISCIPLINAS;
-    console.log(data.DISCIPLINAS)
 
     const semester = document.createElement('div');
     const code = document.createElement('div');
@@ -73,9 +72,7 @@ function createTable(data) {
 
     classes.forEach(element => {
         addRow(element, table);
-    });
-
-    console.log(dict[7]);
+    }); 
 }
 
 function addRow(row, table) {
@@ -119,7 +116,8 @@ function addRow(row, table) {
         DISCIPLINA: row.DISCIPLINA,
         EMENTA: row.EMENTA,
         NAT: row.NAT,
-        HORAS: row.HORAS
+        HORAS: row.HORAS,
+        PREREQUISITOS: row.PREREQUISITOS != null ? row.PREREQUISITOS : null
     }
 }
 
@@ -135,6 +133,10 @@ function loadModal(){
         modal.find('#modal_course_title').html(row.DISCIPLINA);
         modal.find('#modal_course_description').html(row.EMENTA);
         modal.find('#modal_course_infos').html(row.SEMESTRE + 'º Semestre - Modalidade ' + row.NAT + ' - Duração ' + row.HORAS);
+
+        const div = document.getElementById('prerequisites');
+
+        div.style.visibility = row.PREREQUISITOS == null ? 'hidden' : 'visible';
 
         $('body').css('overflow-y', 'hidden');
     });
