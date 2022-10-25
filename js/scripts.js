@@ -17,6 +17,8 @@ function loadPage(data) {
 
     loadHeader(parsedData);
     createTable(parsedData);
+
+    loadModal();
 }
 
 function loadHeader(data) {
@@ -84,17 +86,21 @@ function addRow(row, table) {
 
     semester.innerHTML = row.SEMESTRE;
     semester.classList.add('item');
+    semester.dataset.row = row.ORDEM;
     
     code.innerHTML = row.CODIGO;
     code.classList.add('item');
+    code.dataset.row = row.ORDEM;
     
     name.innerHTML = row.DISCIPLINA;
     name.classList.add('item');
+    name.dataset.row = row.ORDEM;
     
     duration.innerHTML = row.HORAS;
     duration.classList.add('item');
+    duration.dataset.row = row.ORDEM;
 
-    var color = row.ORDEM % 2 === 0 ? '#8db4f2' : '#f2f28d';
+    var color = row.SEMESTRE % 2 === 0 ? '#8db4f2' : '#f2f28d';
 
     semester.style.backgroundColor = color;
     code.style.backgroundColor = color;
@@ -115,4 +121,26 @@ function addRow(row, table) {
         NAT: row.NAT,
         HORAS: row.HORAS
     }
+}
+
+function loadModal(){
+    $('.item').on('click', function(){
+        var row = dict[$(this).data('row')];
+
+        $('.modal').addClass('active');
+
+        var modal = $('.modal-card');
+
+        modal.find('#modal_course_code').html(row.CODIGO);
+        modal.find('#modal_course_title').html(row.DISCIPLINA);
+        modal.find('#modal_course_description').html(row.EMENTA);
+        modal.find('#modal_course_infos').html(row.SEMESTRE + 'º Semestre - Modalidade ' + row.NAT + ' - Duração ' + row.HORAS);
+
+        $('body').css('overflow-y', 'hidden');
+    });
+
+    $('#close_modal').on('click', function () {
+        $('.modal').removeClass('active');
+        $('body').css('overflow-y', 'auto');
+    })
 }
