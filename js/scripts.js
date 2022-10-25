@@ -1,13 +1,13 @@
 let req = new XMLHttpRequest();
 
 req.onreadystatechange = () => {
-  if (req.readyState == XMLHttpRequest.DONE) {
-    loadPage(req.responseText);
-  }
+    if (req.readyState == XMLHttpRequest.DONE) {
+        loadPage(req.responseText);
+    }
 };
 
 req.open("GET", "https://api.jsonbin.io/v3/b/63573cb965b57a31e6a16180/latest", true);
-req.setRequestHeader("X-Master-Key","$2b$10$uThXaux6iYQCRdmFOmsRouUIVF8zmoj1h/H0zXrXCpqtRBf2hC8IK");
+req.setRequestHeader("X-Master-Key", "$2b$10$uThXaux6iYQCRdmFOmsRouUIVF8zmoj1h/H0zXrXCpqtRBf2hC8IK");
 req.send();
 
 var dict = new Object();
@@ -45,19 +45,19 @@ function createTable(data) {
     const duration = document.createElement('div');
 
     const table = document.getElementById('table');
-   
+
     semester.innerHTML = 'Semestre';
     semester.classList.add('item');
-    
+
     code.innerHTML = 'Código da Disciplina';
     code.classList.add('item');
-    
+
     name.innerHTML = 'Nome da Disciplina';
     name.classList.add('item');
-    
+
     duration.innerHTML = 'Número de Horas';
     duration.classList.add('item');
-    
+
     var color = '#ebedec';
 
     semester.style.backgroundColor = color;
@@ -72,7 +72,7 @@ function createTable(data) {
 
     classes.forEach(element => {
         addRow(element, table);
-    }); 
+    });
 }
 
 function addRow(row, table) {
@@ -84,15 +84,15 @@ function addRow(row, table) {
     semester.innerHTML = row.SEMESTRE;
     semester.classList.add('item');
     semester.dataset.row = row.ORDEM;
-    
+
     code.innerHTML = row.CODIGO;
     code.classList.add('item');
     code.dataset.row = row.ORDEM;
-    
+
     name.innerHTML = row.DISCIPLINA;
     name.classList.add('item');
     name.dataset.row = row.ORDEM;
-    
+
     duration.innerHTML = row.HORAS;
     duration.classList.add('item');
     duration.dataset.row = row.ORDEM;
@@ -121,8 +121,8 @@ function addRow(row, table) {
     }
 }
 
-function loadModal(){
-    $('.item').on('click', function(){
+function loadModal() {
+    $('.item').on('click', function () {
         var row = dict[$(this).data('row')];
 
         $('.modal').addClass('active');
@@ -136,12 +136,38 @@ function loadModal(){
 
         const div = document.getElementById('prerequisites');
 
-        div.style.visibility = row.PREREQUISITOS == null ? 'hidden' : 'visible';
+        div.style.display = row.PREREQUISITOS == null ? 'none' : 'block';
+
+        if (row.PREREQUISITOS != null) {
+            if (Number.isInteger(row.PREREQUISITOS)) {
+                addPrerequisite(row.PREREQUISITOS);
+            } else {
+                var prerequisites = row.PREREQUISITOS.split(",");
+                prerequisites.forEach(x => addPrerequisite(parseInt(x)));
+            }
+        }
 
         $('body').css('overflow-y', 'hidden');
     });
 
+    function addPrerequisite(index) {
+        const container = document.getElementById('prerequisites-containter');
+
+        const div = document.createElement('div');
+        div.classList.add('pre-requisito');
+
+        const prerequisite = dict[index];
+
+        div.innerHTML = `
+                            <h2 class='prerequisite-code'>${prerequisite.CODIGO}</h2> 
+                            <h4 class='prerequisite-class'>${prerequisite.DISCIPLINA}</h4>
+                        `;
+
+        container.appendChild(div);
+    }
+
     $('#close_modal').on('click', function () {
+        $('#prerequisites-containter').empty();
         $('.modal').removeClass('active');
         $('body').css('overflow-y', 'auto');
     })
